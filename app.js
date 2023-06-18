@@ -1,18 +1,24 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-
-
-
 require("dotenv").config({ path: "./.env" });
 const app = express();
 
+
+//Database
+const connect = require("./db/connect")
+
+//calling the availabe routes
 const urlRouter = require("./route/url");
 
 
+//middlewares
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.set('view engine','ejs');
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 
 
@@ -20,10 +26,11 @@ app.use(bodyParser.json())
 //routes
 app.use("/api/url", urlRouter);
 
+const port = process.env.PORT||4400;
 
 const start = async () =>{
    try{
-        await connect(process.env.URI)
+        await connect('mongodb://localhost:27017/UrlShortener')
         .then(()=>{
             console.log("databse connected")
         })

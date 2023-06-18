@@ -1,29 +1,44 @@
 const Url = require('../models/url');
 
-const getAllUrl =  async(req, res) => {
-  const urls = await Url.find();
-  res.json(urls);
-};
-
-const createUrl = async (req, res) => {
-  const url = req.body.url;
-  const shortUrl = await Url.create({ url });
-  res.json(shortUrl);
-};
-
-const getSingleUrl = async (req, res) => {
-  const shortUrl = req.params.shortUrl;
-  const url = await Url.findOne({ shortUrl });
-  if (!url) {
-    res.status(404).send('Not found');
-  } else {
-    res.redirect(url.url);
+const createShortUrl = async (req, res) => {
+  try {
+    const fullUrl = req.body.fullUrl;
+    const record = new Url({ full: fullUrl });
+    await record.save();
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
   }
 };
 
-module.exports ={
-    createUrl,
-    getAllUrl,
-    getSingleUrl,
+const redirectToFullUrl = async (req, res) => {
+  try {
+    const shortid = req.params.shortid;
+    const rec = await Url.findOne({ short: shortid });
 
-}
+    if (!rec) {
+      res.sendStatus(404);
+    } else {
+      rec.clicks++;
+      await rec.save();
+      res.redirect(rec.full);
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+const getAllUrl = async (req, res) => {
+  try {
+    const allUrl = await Url.find();
+    res.render('index', { shortUrls: allUrl });
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+module.exports = {
+  createShortUrl,
+  redirectToFullUrl,
+  getAllUrl,
+};
