@@ -17,8 +17,9 @@ const userRouter = require("./route/user");
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.json())
+
 app.set('view engine','ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 
 
@@ -28,7 +29,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/auth", userRouter);
 app.use("/api/url", urlRouter);
 
+
+
+
+// Basic route
+app.get('/', (req, res,next) => {
+    res.render('index')
+  });
+  
+  // Error handling middleware
+  app.use((req, res, next) => {
+    next(createError.NotFound());
+  });
+  
+  app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(status).json({ status, message });
+  });
+
+
+
+
 const port = process.env.PORT||4400;
+
 
 const start = async () => {
     try {

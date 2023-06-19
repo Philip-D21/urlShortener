@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-const register = async (req, res) => {
+const register = async (req, res,next) => {
     try {
       const { username, email, password } = req.body;
   
@@ -31,14 +31,14 @@ const register = async (req, res) => {
         data: newUser,
       });
     } catch (err) {
-      res.status(500).json({
-        status: 'error',
-        message: err.message,
-      });
+    // return res.status(500).json({
+    // message: err.message,
+    // });
+        next(err)
     }
   }
 
-const login = async (req, res) => {
+const login = async (req, res,next) => {
   try {
     const { email, password } = req.body;
 
@@ -65,7 +65,7 @@ const login = async (req, res) => {
     }
 
     // Create a JWT token
-    const token = jwt.sign({ user: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
     return res.status(200).json({
@@ -74,9 +74,10 @@ const login = async (req, res) => {
     });
 
   } catch (err) {
-    return res.status(500).json({
-      message: err.message,
-    });
+    // return res.status(500).json({
+    //   message: err.message,
+    // });
+    next(err);
   }
 };
 
