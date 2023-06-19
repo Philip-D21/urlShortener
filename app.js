@@ -6,10 +6,11 @@ const app = express();
 
 
 //Database
-const connect = require("./db/connect")
+const connect = require("./db/connect");
 
 //calling the availabe routes
 const urlRouter = require("./route/url");
+const userRouter = require("./route/user");
 
 
 //middlewares
@@ -24,28 +25,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 //routes
+app.use("/api/auth", userRouter);
 app.use("/api/url", urlRouter);
 
 const port = process.env.PORT||4400;
 
-const start = async () =>{
-   try{
-        await connect('mongodb://localhost:27017/UrlShortener')
-        .then(()=>{
-            console.log("databse connected")
-        })
-        .catch((err)=>  {
-            console.log("Unable to connect to database");
-            console.log(err);
-        });
-
-        app.listen(port, () => {
-            console.log(`server is running on port ${port}...`)
-        })
-   } catch(err){
-    console.log(err);
-   }
-
-}
-
-start();
+const start = async () => {
+    try {
+       await connect(process.env.MONGO_URI)
+       .then(() => {
+          console.log("Database connected");
+       }).catch((err) => {
+          console.log("Unable to connect to the database");
+          console.log(err);
+       });
+ 
+       app.listen(port, () => {
+          console.log(`server is running on port ${port}...`);
+       });
+    } catch (err) {
+       console.log(err);
+    }
+ };
+ 
+ start();
+ 

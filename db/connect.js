@@ -3,8 +3,8 @@ require("dotenv").config();
 
 // const uri = process.env.URI||'mongodb://localhost:27017'
 
-const connect = () =>{
-   return mongoose.connect(process.env.URI)
+const connect = (url) =>{
+   return mongoose.connect(url)
 }
 
 

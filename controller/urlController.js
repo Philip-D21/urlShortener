@@ -1,13 +1,13 @@
-const Url = require('../models/url');
+const Url = require("../models/url");
 
 const createShortUrl = async (req, res) => {
   try {
     const fullUrl = req.body.fullUrl;
     const record = new Url({ full: fullUrl });
     await record.save();
-    res.redirect('/');
+    res.redirect("/");
   } catch (error) {
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -24,16 +24,16 @@ const redirectToFullUrl = async (req, res) => {
       res.redirect(rec.full);
     }
   } catch (error) {
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 };
 
 const getAllUrl = async (req, res) => {
   try {
     const allUrl = await Url.find();
-    res.render('index', { shortUrls: allUrl });
+    res.render("index", { shortUrls: allUrl });
   } catch (error) {
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 };
 
