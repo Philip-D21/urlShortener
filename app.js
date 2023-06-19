@@ -33,7 +33,7 @@ app.use("/api/url", urlRouter);
 
 
 // Basic route
-app.get('/', (req, res,next) => {
+app.get('/', (req, res) => {
     res.render('index')
   });
   
