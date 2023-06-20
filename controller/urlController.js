@@ -1,24 +1,19 @@
 const Url = require("../models/url");
 
 const createShortUrl = async (req, res) => {
-     await Url.create({ full: req.body.fullUrl})
-     
-     res.redirect('/')
-
-
-  // try {
-  //   const fullUrl = req.body.fullUrl;
-  //   const record = new Url({ 
-  //     full: fullUrl 
-  //   });
-  //   await record.save();
-  //   res.redirect("/");
-  // } catch (err) {
-  //   res.status(500).send({
-  //     message: err.message,
-  //     info:"Internal Server Error"
-  //   });
-  // }
+  try {
+    const fullUrl = req.body.fullUrl;
+    const record = new Url({ 
+      full: fullUrl 
+    });
+    await record.save();
+    res.redirect("/");
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+      info:"Internal Server Error"
+    });
+  }
 };
 
 const redirectToFullUrl = async (req, res) => {
