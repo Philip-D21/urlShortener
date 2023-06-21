@@ -3,11 +3,15 @@ const router = express.Router();
 
 const {
     createShortenUrl,
-    redirectToLongUrl
+    getQRImage,
+    analytics
+   
 }= require("../controller/urlController")
 
 router.post("/shorten", createShortenUrl);
-router.get("/:shortId", redirectToLongUrl);
+router.get("/image/:shortId", getQRImage);
+router.get("/analytics", analytics);
+
 
 
 

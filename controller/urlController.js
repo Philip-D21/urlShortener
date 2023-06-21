@@ -13,7 +13,7 @@ const generateQRCode = async (shortId) => {
     const qrCodeData = await QRCode.toDataURL(shortId);
 
     // Save the QR code image to a file
-    const qrCodeImagePath = path.join(__dirname, 'qrcode.png');
+    const qrCodeImagePath = path.join(__dirname,'..','QRCodes','qrcode.png');
     await QRCode.toFile(qrCodeImagePath, shortId);
 
     return qrCodeImagePath;
@@ -86,10 +86,63 @@ const redirectToLongUrl = async (req, res) => {
   }
 };
 
+const analytics = async(req, res) => {
+  try {
+    const { shortId } = req.params;
+
+    // Find the URL entry in the database based on the shortId
+    const url = await Url.findOne({ shortId });
+
+    if (!url) {
+      return res.status(404).json({ message: 'URL not found' });
+    }
+
+    // Return the analytics data
+    return res.status(200).json({
+      clicks: url.clicks,
+      // other analytics data you want to provide
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+const getQRImage = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+
+    if (!shortId) {
+      return res.status(400).json({ message: "Please provide the shortId!" });
+    }
+
+    const url = await Url.findOne({ shortId });
+
+    if (!url) {
+      return res.status(400).json({ message: "QR code image does not exist for the provided shortId!" });
+    }
+
+    const qrCodeImagePath = path.join(__dirname, '..','QRCodes', `${shortId}.png`);
+
+    return res.sendFile(qrCodeImagePath, (err) => {
+      if (err) {
+        console.error('Error sending QR code image:', err);
+        return res.status(500).json({ message: "Failed to send QR code image!" });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   createShortenUrl,
   redirectToLongUrl,
+  analytics,
+  getQRImage,
 };
 
 

@@ -34,7 +34,7 @@ app.use("/api/url", urlRouter);
 
 // Basic route
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('landing')
   });
   
   // Error handling middleware

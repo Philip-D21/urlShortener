@@ -5,7 +5,7 @@ const urlInput = document.querySelector("#long-url");
 form.onsubmit = async (e) => {
     e.preventDefault();
     try {
-        const { data } = await axios.post("http://localhost:4400/api/v1/shorten", {
+        const { data } = await axios.post("http://localhost:4400/api/url/shorten", {
             longUrl: urlInput.value
         });
         if (data.shortUrl) {
@@ -15,7 +15,7 @@ form.onsubmit = async (e) => {
                 <i class="fa-regular fa-copy"></i>
             </div>
             <div class="qr-box">
-                <img src="/api/v1/shorten/image/${data.shortId}">
+                <img src="/api/url/image/${data.shortId}">
             </div>`
         }
     } catch (error) {
