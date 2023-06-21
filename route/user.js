@@ -4,13 +4,13 @@ const router = express.Router();
 const { register, login } = require("../controller/auth");
 
 router.get("/signup", (req, res) => {
-  res.render("signup", { message: "" });
+  res.render("signup");
 });
 
 router.post("/signup", register);
 
 router.get("/login", (req, res) => {
-  res.render("login", { message: "" });
+  res.render("login");
 });
 
 router.post("/login", login);
