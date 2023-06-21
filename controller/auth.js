@@ -30,6 +30,12 @@ const register = async (req, res,next) => {
         status: 'success',
         data: newUser,
       });
+
+
+    // Redirect to login page after successful signup
+    res.redirect("/login");
+
+    
     } catch (err) {
     // return res.status(500).json({
     // message: err.message,
@@ -72,6 +78,7 @@ const login = async (req, res,next) => {
       message: 'Login successful',
       token,
     });
+
 
   } catch (err) {
     // return res.status(500).json({

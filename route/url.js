@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    createShortUrl,
-    getAllUrl,
-    redirectToFullUrl
+    createShortenUrl,
+    visitUrl
 }= require("../controller/urlController")
 
-router.post("/short", createShortUrl);
-router.get("/:id", redirectToFullUrl);
-router.get("/all", getAllUrl);
+router.post("/shorten", createShortenUrl);
+router.get("/:shortId", visitUrl);
+
+// router.get("/all", getAllUrl);
 
 
 
