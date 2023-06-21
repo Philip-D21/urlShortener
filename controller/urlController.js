@@ -7,23 +7,20 @@ require("dotenv").config();
 
 
 
-const generateQRCode = (shortId, res) => {
-  return new Promise((resolve, reject) => {
-    if (!shortId) {
-      return reject(new BadRequestError('Please provide the shortId!'));
-    }
+const generateQRCode = async (shortId) => {
+  try {
+    // Generate the QR code
+    const qrCodeData = await QRCode.toDataURL(shortId);
 
-    QRCode.toFile(`./QRCodes/${shortId}.png`, `${process.env.Base_URL}/${shortId}`, {
-      errorCorrectionLevel: 'H'
-    }, (error) => {
-      if (error) {
-        return reject(error);
-      }
+    // Save the QR code image to a file
+    const qrCodeImagePath = path.join(__dirname, 'qrcode.png');
+    await QRCode.toFile(qrCodeImagePath, shortId);
 
-      // Send the response indicating successful QR code generation
-      return resolve(res.status(200).json({ message: 'QR code generated successfully' }));
-    });
-  });
+    return qrCodeImagePath;
+  } catch (error) {
+    console.error('Error generating QR code:', error);
+    throw error;
+  }
 };
 
 
@@ -42,57 +39,57 @@ const createShortenUrl = async (req, res) => {
     // Check if the URL already exists in the database
     let url = await Url.findOne({ longUrl });
     if (url) {
-      // Generate a QR code for the existing shortId
-      generateQRCode(url.shortId, res);
-
       // Send the existing URL as the response
-      return res.status(201).json(url);
+      return res.status(200).json(url);
     }
 
     // Generate a new shortId and shortUrl
     const shortId = shortid.generate();
     const shortUrl = `${process.env.Base_URL}/${shortId}`;
 
+    // Generate the QR code
+    const qrCodeImagePath = await generateQRCode(shortId);
+
     // Create a new URL entry in the database
     url = await Url.create({ longUrl, shortUrl, shortId });
 
-    // Generate a QR code for the new shortId
-    generateQRCode(shortId, res);
-
     // Send the newly created URL as the response
-    return res.status(201).json({ url });
+    return res.status(201).json({ 
+      url,
+      qrCodeImagePath,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 
-const visitUrl = async (req, res) => {
+const redirectToLongUrl = async (req, res) => {
   try {
-    // Extract the shortId from the request parameters
     const { shortId } = req.params;
 
     // Find the URL entry in the database based on the shortId
     const url = await Url.findOne({ shortId });
 
-    // Check if the URL exists
     if (!url) {
-      throw new NotFoundError("URL doesn't exist");
+      return res.status(404).json({ message: 'URL not found' });
     }
 
-    // Redirect the user to the original longUrl
+    // Increment the click count
+    url.clicks++;
+    await url.save();
+
+    // Redirect to the long URL
     return res.redirect(url.longUrl);
   } catch (error) {
-    console.log(error);
-    // Handle the error and send an appropriate response
-    return res.status(404).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 
 module.exports = {
   createShortenUrl,
-  visitUrl,
+  redirectToLongUrl,
 };
 
 

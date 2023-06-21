@@ -3,13 +3,11 @@ const router = express.Router();
 
 const {
     createShortenUrl,
-    visitUrl
+    redirectToLongUrl
 }= require("../controller/urlController")
 
 router.post("/shorten", createShortenUrl);
-router.get("/:shortId", visitUrl);
-
-// router.get("/all", getAllUrl);
+router.get("/:shortId", redirectToLongUrl);
 
 
 
