@@ -10,7 +10,7 @@ const {
 
 router.post("/shorten", createShortenUrl);
 router.get("/image/:shortId", getQRImage);
-router.get("/analytics", analytics);
+router.get("/analytics/:shortId", analytics);
 
 
 

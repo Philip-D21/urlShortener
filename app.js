@@ -13,7 +13,7 @@ const connect = require("./db/connect");
 //calling the availabe routes
 const urlRouter = require("./route/url");
 const userRouter = require("./route/user");
-
+const mainRouter = require("./route/main");
 
 //middlewares
 app.use(morgan('dev'));
@@ -33,15 +33,17 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use("/api/auth", userRouter);
 app.use("/api/url", urlRouter);
+app.use("/", mainRouter);
 
 
 
 // Basic route
-app.get('/', (req, res) => {
-    res.render('landing')
-  });
+// app.get('/', (req, res) => {
+//     res.render('landing')
+//   });
   
-  // Error handling middleware
+
+// Error handling middleware
 app.use((req, res, next) => {
     next(createError.NotFound());
   });

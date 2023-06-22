@@ -13,8 +13,10 @@ const generateQRCode = async (shortId) => {
     const qrCodeData = await QRCode.toDataURL(shortId);
 
     // Save the QR code image to a file
-    const qrCodeImagePath = path.join(__dirname,'..','QRCodes','qrcode.png');
-    await QRCode.toFile(qrCodeImagePath, shortId);
+    const qrCodeImagePath =  `./QRCodes/${shortId}.png`;
+    //path.join(__dirname, '..', 'QRCodes', 'qrcode.png');
+    await QRCode.toFile(qrCodeImagePath, qrCodeData
+     );
 
     return qrCodeImagePath;
   } catch (error) {
@@ -22,6 +24,7 @@ const generateQRCode = async (shortId) => {
     throw error;
   }
 };
+
 
 
 
@@ -48,7 +51,7 @@ const createShortenUrl = async (req, res) => {
     const shortUrl = `${process.env.Base_URL}/${shortId}`;
 
     // Generate the QR code
-    const qrCodeImagePath = await generateQRCode(shortId);
+   const qrCodeImagePath = await generateQRCode(shortId);
 
     // Create a new URL entry in the database
     url = await Url.create({ longUrl, shortUrl, shortId });
@@ -138,11 +141,35 @@ const getQRImage = async (req, res) => {
 };
 
 
+const getLinkHistory = async (req, res) => {
+  try {
+    // Retrieve the user ID from the request or authentication
+    const userId = req.user.id;
+
+    // Query the Url model to find all URLs associated with the user ID
+    const linkHistory = await Url.find({ userId });
+
+    // Send the link history as the response
+    res.status(200).json({
+      status: "success",
+      data: linkHistory,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+
+
 module.exports = {
   createShortenUrl,
   redirectToLongUrl,
   analytics,
   getQRImage,
+  getLinkHistory
 };
 
 
