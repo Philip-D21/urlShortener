@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
+
 const register = async (req, res,next) => {
     try {
       const { username, email, password } = req.body;
@@ -33,9 +34,9 @@ const register = async (req, res,next) => {
 
 
     // Redirect to login page after successful signup
-    res.redirect("/login");
+    res.redirect("/api/auth/login");
 
-    
+
     } catch (err) {
     // return res.status(500).json({
     // message: err.message,
@@ -79,7 +80,7 @@ const login = async (req, res,next) => {
       token,
     });
 
-
+res.redirect("/landing")
   } catch (err) {
     // return res.status(500).json({
     //   message: err.message,

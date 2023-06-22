@@ -5,7 +5,7 @@ const urlInput = document.querySelector("#long-url");
 form.onsubmit = async (e) => {
     e.preventDefault();
     try {
-        const { data } = await axios.post("http://localhost:4400/api/url/shorten", {
+        const { data } = await axios.post("/api/url/shorten", {
             longUrl: urlInput.value
         });
         if (data.shortUrl) {

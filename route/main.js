@@ -3,7 +3,7 @@ const router = express.Router();
 const {redirectToLongUrl }= require("../controller/urlController")
 
 router.route("/").get((req,res) => {
-    res.render("main");
+    res.render("landing");
 });
 router.get("/:shortId", redirectToLongUrl);
 
