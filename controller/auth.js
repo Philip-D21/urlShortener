@@ -27,14 +27,11 @@ const register = async (req, res,next) => {
         password: hashedPassword,
       });
   
-      res.status(201).json({
-        status: 'success',
-        data: newUser,
-      });
-
-
-    // Redirect to login page after successful signup
-    res.redirect("/api/auth/login");
+      res.redirect("/api/auth/login");
+    //   res.status(201).json({
+    //     status: 'success',
+    //     data: newUser,
+    //   });
 
 
     } catch (err) {
@@ -75,12 +72,13 @@ const login = async (req, res,next) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
-    return res.status(200).json({
-      message: 'Login successful',
-      token,
-    });
+    res.redirect("/api/url/shorten")
+    // return res.status(200).json({
+    //   message: 'Login successful',
+    //   token,
+    // });
 
-res.redirect("/landing")
+
   } catch (err) {
     // return res.status(500).json({
     //   message: err.message,

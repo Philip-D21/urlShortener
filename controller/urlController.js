@@ -34,10 +34,10 @@ const createShortenUrl = async (req, res) => {
     // Extract the long URL from the request body
     const { longUrl } = req.body;
 
-    // Check if the long URL is provided and valid
-    if (!longUrl || !validUrl.isUri(longUrl)) {
-      return res.status(409).json({ message: 'Wrong URL format!' });
-    }
+    // // Check if the long URL is provided and valid
+    // if (!longUrl || !validUrl.isUri(longUrl)) {
+    //   return res.status(409).json({ message: 'Wrong URL format!' });
+    // }
 
     // Check if the URL already exists in the database
     let url = await Url.findOne({ longUrl });

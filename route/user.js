@@ -6,6 +6,8 @@ const { register, login } = require("../controller/auth");
 
 router.get("/signup", (req, res) => {
   res.render("signup");
+
+  
 });
 
 router.post("/signup", register);

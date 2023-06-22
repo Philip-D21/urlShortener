@@ -8,6 +8,9 @@ const {
    
 }= require("../controller/urlController")
 
+router.get("/shorten", async(req,res)=>{
+    res.render('main')
+})
 router.post("/shorten", createShortenUrl);
 router.get("/image/:shortId", getQRImage);
 router.get("/analytics/:shortId", analytics);
