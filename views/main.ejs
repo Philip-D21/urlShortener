@@ -132,28 +132,29 @@
                 const contentDiv = document.querySelector(".content")
                 const form = document.querySelector("form");
                 const urlInput = document.querySelector("#long-url");
-
+              
                 form.onsubmit = async (e) => {
-                    e.preventDefault();
-                    try {
-                        const { data } = await axios.post("/api/url/shorten", {
-                            longUrl: urlInput.value
-                        });
-                        if (data.shortUrl) {
-                            contentDiv.innerHTML = `<p>Here is your short URL:</p>
-                            <div class="box">
-                                <a href="${data.shortUrl}">${data.shortUrl}</a>
-                                <i class="fa-regular fa-copy"></i>
-                            </div>
-                            <div class="qr-box">
-                                <img src="/api/url/image/${data.shortId}">
-                            </div>`
-                        }
-                    } catch (error) {
-                        console.log(error);
+                  e.preventDefault();
+                  try {
+                    const { data } = await axios.post("/api/url/shorten", {
+                      longUrl: urlInput.value
+                    });
+                    if (data.shortUrl) {
+                      contentDiv.innerHTML = `
+                      <p>Here is your short URL:</p>
+                      <div class="box" style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <a href="${data.shortUrl}" style="text-decoration: none; color: #000; font-weight: bold;">${data.shortUrl}</a>
+                        <i class="fa-regular fa-copy" style="margin-left: 10px; color: #000;"></i>
+                      </div>
+                      <div class="qr-box">
+                        <img src="/api/url/image/${data.shortId}" style="max-width: 200px;">
+                      </div>`;
                     }
+                  } catch (error) {
+                    console.log(error);
+                  }
                 }
-            </script>
+              </script>
         </main>
         <footer>
             <!-- Footer content -->

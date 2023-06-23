@@ -3,30 +3,40 @@ const validUrl = require('valid-url');
 const shortid = require('shortid');
 const QRCode = require("qrcode")
 const path = require("path");
+// const { nanoid } = require('nanoid')
 require("dotenv").config();
 
 
 
+// const generateQRCode = async (shortId) => {
+//   try {
+//     // Generate the QR code
+//     const qrCodeData = await QRCode.toDataURL(shortId); 
+//      const qrCodeImagePath =  (`./QRCodes/${shortId}.png`, `${process.env.Base_URL}/${shortId}`,{
+//       errorCorrectionLevel: "H"
+//     });
+//     //path.join(__dirname, '..', 'QRCodes', 'qrcode.png');
+//     await QRCode.toFile(qrCodeImagePath,qrCodeData);
+
+//     return qrCodeImagePath;
+//   } catch (error) {
+//     console.error('Error generating QR code:', error);
+//     throw error;
+//   }
+// };
+
 const generateQRCode = async (shortId) => {
-  try {
-    // Generate the QR code
-    const qrCodeData = await QRCode.toDataURL(shortId);
-
-    // Save the QR code image to a file
-    const qrCodeImagePath =  `./QRCodes/${shortId}.png`;
-    //path.join(__dirname, '..', 'QRCodes', 'qrcode.png');
-    await QRCode.toFile(qrCodeImagePath, qrCodeData
-     );
-
-    return qrCodeImagePath;
-  } catch (error) {
-    console.error('Error generating QR code:', error);
-    throw error;
+  if(!shortId) {
+      return res.status(409).json({message:"Please provide the shortId!"});
   }
-};
-
-
-
+  try {
+      await QRCode.toFile(`./QRCodes/${shortId}.png`, `${process.env.Base_URL}/${shortId}`, {
+      errorCorrectionLevel: "H"
+  })
+  } catch (error) {
+      console.log(error);
+  }
+}
 
 
 const createShortenUrl = async (req, res) => {
@@ -34,33 +44,29 @@ const createShortenUrl = async (req, res) => {
     // Extract the long URL from the request body
     const { longUrl } = req.body;
 
-    // // Check if the long URL is provided and valid
-    // if (!longUrl || !validUrl.isUri(longUrl)) {
-    //   return res.status(409).json({ message: 'Wrong URL format!' });
-    // }
+    // Check if the long URL is provided and valid
+    if (!longUrl || !validUrl.isUri(longUrl)) {
+      return res.status(409).json({ message: 'Wrong URL format!' });
+    }
 
     // Check if the URL already exists in the database
     let url = await Url.findOne({ longUrl });
     if (url) {
-      // Send the existing URL as the response
+      generateQRCode(url.shortId)
       return res.status(200).json(url);
-    }
-
+    } else {
     // Generate a new shortId and shortUrl
     const shortId = shortid.generate();
-    const shortUrl = `${process.env.Base_URL}/${shortId}`;
-
-    // Generate the QR code
-   const qrCodeImagePath = await generateQRCode(shortId);
-
+    const shortUrl = process.env.Base_URL + "/" + shortId;
     // Create a new URL entry in the database
     url = await Url.create({ longUrl, shortUrl, shortId });
-
+    generateQRCode(shortId);
     // Send the newly created URL as the response
     return res.status(201).json({ 
       url,
-      qrCodeImagePath,
+      // qrCodeImagePath,
     });
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
