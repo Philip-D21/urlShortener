@@ -92,55 +92,13 @@ Success
 ```
 
 
-#### Register 
-
-* To register a user, you can make a POST request to
-
-  /api/auth/signup
-
-
-#### Login 
-
-* To login as user, simply make a post request to
-
-/api/auth/login
-
-
-
-
-#### URL
+#### URL Features
 
    
 
    
 
 
-
-* Display all published blog
-
-   To get all blogs, simply make a GET  request to 
-
-   /api/blog
-
-
-* To display single blog by id, make a GET request to
-  
-   /api/blog/:blogId
-
-
-* Search for keywords in the blog
-
-   To search for a specific blog with keyword , make a POST request to
-
-/api/blog/search
-
-
-
-## CONTACT US 
-
-   To send email to support make a POST request 
-
-   https://fredacom.onrender.com/api/support/contact
 
 ## Contributor
    - Daudu Philip
