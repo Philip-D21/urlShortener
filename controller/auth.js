@@ -8,7 +8,6 @@ const register = async (req, res,next) => {
     try {
       const { username, email, password } = req.body;
   
-      // Check if user with the same email already exists
       const userExist = await User.findOne({ email });
       if (userExist) {
         return res.status(409).json({
@@ -17,10 +16,8 @@ const register = async (req, res,next) => {
         });
       }
   
-      // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      // Create a new user
       const newUser = await User.create({
         username,
         email,
@@ -42,7 +39,7 @@ const register = async (req, res,next) => {
     }
   }
 
-const login = async (req, res,next) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -68,22 +65,20 @@ const login = async (req, res,next) => {
       });
     }
 
-    // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
-    res.redirect("/api/url/shorten")
-    // return res.status(200).json({
-    //   message: 'Login successful',
-    //   token,
-    // });
+   // res.redirect("/api/url/shorten")
+    return res.status(200).json({
+      message: 'Login successful',
+      token,
+    });
 
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
 
-  } catch (err) {
-    // return res.status(500).json({
-    //   message: err.message,
-    // });
-    next(err);
   }
 };
 

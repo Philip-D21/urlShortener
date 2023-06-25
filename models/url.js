@@ -23,8 +23,14 @@ const urlSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+  }, 
+  customUrl: {
+    type: String,
+    unique: true,
   },
 });
+
+
 
 
 

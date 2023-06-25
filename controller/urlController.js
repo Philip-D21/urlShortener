@@ -1,71 +1,63 @@
 const Url = require("../models/url");
-const validUrl = require('valid-url');
-const shortid = require('shortid');
-const QRCode = require("qrcode")
+const validUrl = require("valid-url");
+const shortid = require("shortid");
+const QRCode = require("qrcode");
 const path = require("path");
-// const { nanoid } = require('nanoid')
 require("dotenv").config();
 
 
 
-// const generateQRCode = async (shortId) => {
-//   try {
-//     // Generate the QR code
-//     const qrCodeData = await QRCode.toDataURL(shortId); 
-//      const qrCodeImagePath =  (`./QRCodes/${shortId}.png`, `${process.env.Base_URL}/${shortId}`,{
-//       errorCorrectionLevel: "H"
-//     });
-//     //path.join(__dirname, '..', 'QRCodes', 'qrcode.png');
-//     await QRCode.toFile(qrCodeImagePath,qrCodeData);
 
-//     return qrCodeImagePath;
-//   } catch (error) {
-//     console.error('Error generating QR code:', error);
-//     throw error;
-//   }
-// };
 
 const generateQRCode = async (shortId) => {
-  if(!shortId) {
-      return res.status(409).json({message:"Please provide the shortId!"});
+  if (!shortId) {
+    return res.status(409).json({ message: "Please provide the shortId!" });
   }
   try {
-      await QRCode.toFile(`./QRCodes/${shortId}.png`, `${process.env.Base_URL}/${shortId}`, {
-      errorCorrectionLevel: "H"
-  })
+    await QRCode.toFile(
+      `./QRCodes/${shortId}.png`,
+      `${process.env.Base_URL}/${shortId}`,
+      {
+        errorCorrectionLevel: "H",
+      }
+    );
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-}
+};
+
 
 
 const createShortenUrl = async (req, res) => {
   try {
-    // Extract the long URL from the request body
-    const { longUrl } = req.body;
-
-    // Check if the long URL is provided and valid
+    const { longUrl , userId } = req.body;
+   //validate url
     if (!longUrl || !validUrl.isUri(longUrl)) {
-      return res.status(409).json({ message: 'Wrong URL format!' });
+      return res.status(409).json({ message: "Wrong URL format!" });
     }
-
-    // Check if the URL already exists in the database
+  const user = await User.findOne({ email: email})
+     if(!user){
+         return res.status(404).json({message: 'user does not exist'});
+     }
     let url = await Url.findOne({ longUrl });
     if (url) {
-      generateQRCode(url.shortId)
+      generateQRCode(url.shortId);
       return res.status(200).json(url);
     } else {
-    // Generate a new shortId and shortUrl
-    const shortId = shortid.generate();
-    const shortUrl = process.env.Base_URL + "/" + shortId;
-    // Create a new URL entry in the database
-    url = await Url.create({ longUrl, shortUrl, shortId });
-    generateQRCode(shortId);
-    // Send the newly created URL as the response
-    return res.status(201).json({ 
-      url,
-      // qrCodeImagePath,
-    });
+      const shortId = shortid.generate();
+      const shortUrl = process.env.Base_URL + "/" + shortId;
+
+      url = await Url.create({ 
+        longUrl, 
+        shortUrl, 
+        shortId, 
+        userId 
+      });
+      generateQRCode(shortId);
+
+      return res.status(201).json({
+        url,
+      });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -73,29 +65,28 @@ const createShortenUrl = async (req, res) => {
 };
 
 
+
 const redirectToLongUrl = async (req, res) => {
   try {
     const { shortId } = req.params;
-
-    // Find the URL entry in the database based on the shortId
     const url = await Url.findOne({ shortId });
 
     if (!url) {
-      return res.status(404).json({ message: 'URL not found' });
+      return res.status(404).json({ message: "URL not found" });
     }
-
-    // Increment the click count
     url.clicks++;
     await url.save();
 
-    // Redirect to the long URL
+  
     return res.redirect(url.longUrl);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const analytics = async(req, res) => {
+
+
+const analytics = async (req, res) => {
   try {
     const { shortId } = req.params;
 
@@ -103,20 +94,16 @@ const analytics = async(req, res) => {
     const url = await Url.findOne({ shortId });
 
     if (!url) {
-      return res.status(404).json({ message: 'URL not found' });
+      return res.status(404).json({ message: "URL not found" });
     }
 
-    // Return the analytics data
     return res.status(200).json({
       clicks: url.clicks,
-      // other analytics data you want to provide
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-
-
 
 
 const getQRImage = async (req, res) => {
@@ -126,19 +113,28 @@ const getQRImage = async (req, res) => {
     if (!shortId) {
       return res.status(400).json({ message: "Please provide the shortId!" });
     }
-
     const url = await Url.findOne({ shortId });
-
     if (!url) {
-      return res.status(400).json({ message: "QR code image does not exist for the provided shortId!" });
+      return res
+        .status(400)
+        .json({
+          message: "QR code image does not exist for the provided shortId!",
+        });
     }
 
-    const qrCodeImagePath = path.join(__dirname, '..','QRCodes', `${shortId}.png`);
+    const qrCodeImagePath = path.join(
+      __dirname,
+      "..",
+      "QRCodes",
+      `${shortId}.png`
+    );
 
     return res.sendFile(qrCodeImagePath, (err) => {
       if (err) {
-        console.error('Error sending QR code image:', err);
-        return res.status(500).json({ message: "Failed to send QR code image!" });
+        console.error("Error sending QR code image:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to send QR code image!" });
       }
     });
   } catch (error) {
@@ -147,24 +143,16 @@ const getQRImage = async (req, res) => {
 };
 
 
-const getLinkHistory = async (req, res) => {
+const getClickCount = async (req, res) => {
+  const { shortUrl } = req.body;
+
   try {
-    // Retrieve the user ID from the request or authentication
-    const userId = req.user.id;
-
-    // Query the Url model to find all URLs associated with the user ID
-    const linkHistory = await Url.find({ userId });
-
-    // Send the link history as the response
-    res.status(200).json({
-      status: "success",
-      data: linkHistory,
-    });
+    const url = await Url.findOne({ shortUrl }).populate('clicks');
+    const clickCount = url.clicks.length;
+    res.status(200).json({ clickCount });
   } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: error.message,
-    });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get click count' });
   }
 };
 
@@ -175,97 +163,5 @@ module.exports = {
   redirectToLongUrl,
   analytics,
   getQRImage,
-  getLinkHistory
+  getClickCount,
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const createShortUrl = async (req, res) => {
-//   try {
-//     const fullUrl = req.body.fullUrl;
-//     const record = new Url({ 
-//       full: fullUrl 
-//     });
-//     await record.save();
-//     res.redirect("/");
-//   } catch (err) {
-//     res.status(500).send({
-//       message: err.message,
-//       info:"Internal Server Error"
-//     });
-//   }
-// };
-
-// const redirectToFullUrl = async (req, res) => {
-//   try {
-//     const shortid = req.params.shortid;
-//     const rec = await Url.findOne({ short: shortid });
-
-//     if (!rec) {
-//       res.sendStatus(404);
-//     } else {
-//       rec.clicks++;
-//       await rec.save();
-//       res.redirect(rec.full);
-//     }
-//   } catch (error) {
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
-// const getAllUrl = async (req, res) => {
-//   try {
-//     const allUrl = await Url.find();
-//     res.render("index", { shortUrls: allUrl });
-//   } catch (error) {
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
-// module.exports = {
-//   createShortUrl,
-//   redirectToFullUrl,
-//   getAllUrl,
-// };

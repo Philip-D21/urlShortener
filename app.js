@@ -1,3 +1,4 @@
+//importing express
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -20,9 +21,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.json())
 app.use(cors());
-// app.use(flash())
+
+
 app.use(express.static('public'));
 
+// view engine configuration
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'views'));
 
