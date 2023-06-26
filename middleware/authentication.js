@@ -11,7 +11,7 @@ const authenticate = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user.id = decoded;
+    req.user = decoded;
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {

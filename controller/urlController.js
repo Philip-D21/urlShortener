@@ -30,15 +30,15 @@ const generateQRCode = async (shortId) => {
 
 const createShortenUrl = async (req, res) => {
   try {
-    const { longUrl , userId } = req.body;
+    const { longUrl } = req.body;
    //validate url
     if (!longUrl || !validUrl.isUri(longUrl)) {
       return res.status(409).json({ message: "Wrong URL format!" });
     }
-  const user = await User.findOne({ email: email})
-     if(!user){
-         return res.status(404).json({message: 'user does not exist'});
-     }
+  // const user = await User.findOne({ email: email})
+  //    if(!user){
+  //        return res.status(404).json({message: 'user does not exist'});
+  //    }
     let url = await Url.findOne({ longUrl });
     if (url) {
       generateQRCode(url.shortId);
@@ -51,7 +51,7 @@ const createShortenUrl = async (req, res) => {
         longUrl, 
         shortUrl, 
         shortId, 
-        userId 
+        userId: req.user.id
       });
       generateQRCode(shortId);
 
