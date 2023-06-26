@@ -39,13 +39,13 @@ Don't forget to add .env file contain the MONGO_URI, PORT and Base_URL Variables
 
 
 ### base URL
-  - [Home page] ()
+  - [Home page] (https://sho-rtly.onrender.com/)
 
 #### Register 
 
 * To register a user, you can make a POST request to
 
-  /api/auth/signup
+  https://sho-rtly.onrender.com/api/auth/signup
 
 - Route: /signup
 - Method: POST
