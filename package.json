@@ -27,6 +27,7 @@
     "nanoid": "^4.0.2",
     "nodemon": "^2.0.22",
     "qrcode": "^1.5.3",
+    "redis": "^4.6.7",
     "shortid": "^2.2.16",
     "valid-url": "^1.0.9",
     "validator": "^13.9.0"
