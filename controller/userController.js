@@ -3,9 +3,7 @@ const Url = require("../models/url")
 
 
 
-  
-
-  const getAllUrlsByUser = async (req, res) => {
+const getAllUrlsByUser = async (req, res) => {
     try {
       const { userId } = req.params;
       const urls = await Url.find({ userId });
@@ -23,7 +21,6 @@ const Url = require("../models/url")
   
 
 
-
 module.exports = {
-    userProfileAndHistory
+    getAllUrlsByUser
 }

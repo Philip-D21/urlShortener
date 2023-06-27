@@ -158,6 +158,40 @@ Success
 }
 ```
 ---
+### get all url created by a user
+
+- Route: /api/auth/user/:userId/urls
+- Method: GET
+- Header
+    - application/json
+- Body: 
+
+```
+{
+  
+  longUrl: "https://qawsedfrt.com/cvfdghn
+  
+}
+```
+- Responses
+---
+
+### get analytics of the shortened url 
+
+- Route: /api/url/shorten
+- Method: GET
+- Header
+    - application/json
+- Body: 
+
+```
+{
+  
+  req.params: /ananltics/:shortId
+  
+}
+```
+- Responses
 
 ## Contributor
    - Daudu Philip

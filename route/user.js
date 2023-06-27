@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { authenticate} = require("../middleware/authentication")
+
 
 const { register, login } = require("../controller/auth");
-const { userProfileAndHistory } = require("../controller/userController");
+const { getAllUrlsByUser } = require("../controller/userController");
 
 router.get("/signup", (req, res) => {
   res.render("signup");
@@ -24,7 +24,7 @@ router.get("/history/:userId", (req, res) => {
     res.render("link history");
   });
 
-router.get("/history/:userId", userProfileAndHistory);
+  router.get('/user/:userId/urls', getAllUrlsByUser);
 
 
 
