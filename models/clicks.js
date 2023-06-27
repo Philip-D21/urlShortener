@@ -4,16 +4,15 @@ const clickSchema = new mongoose.Schema({
   urlId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'URL',
-    required: true,
+
   },
-  timestamp: {
+ createdAt: {
     type: Date,
-    default: Date.now,
-    required: true,
+    default: Date.now(),
+    
   },
   ipAddress: {
     type: String,
-    required: true,
   },
 });
 
