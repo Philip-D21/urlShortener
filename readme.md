@@ -100,7 +100,7 @@ Back-end development Tech Stack
 - Responses
 
 Success
-```
+
 ---
 
 ### Login User
@@ -108,6 +108,7 @@ Success
 - Route: https://sho-rtly.onrender.com/api/auth/login
 - Method: POST
 - Body: 
+
 ```
 {
   "password": "Password1",
@@ -142,7 +143,6 @@ Success
   
 }
 ```
-
 - Responses
 
 Success
@@ -158,12 +158,6 @@ Success
 }
 ```
 ---
-
-
-
-   
-
-   
 
 ## Contributor
    - Daudu Philip
