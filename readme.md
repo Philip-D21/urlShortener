@@ -1,3 +1,6 @@
+## Sho.rtly
+ - This is url shortener and also generates QR code for the shortened Url
+ ---
 # Setup
 Back-end development Tech Stack
 * Node.js
