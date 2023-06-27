@@ -5,6 +5,7 @@ const {redirectToLongUrl }= require("../controller/urlController")
 router.route("/").get((req,res) => {
     res.render("landing");
 });
-router.get("/:shortId", redirectToLongUrl);
+
+router.get("/url/:shortId", redirectToLongUrl);
 
 module.exports = router

@@ -13,7 +13,11 @@ router.get("/shorten", async(req,res)=>{
 })
 
 router.post("/shorten", authenticate, createShortenUrl);
+
+
 router.get("/image/:shortId",authenticate, getQRImage);
+
+
 router.get("/analytics/:shortId", authenticate, analytics);
 
 

@@ -3,12 +3,13 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const REDIS_USERNAME = process.env.REDIS_USERNAME || 'default';
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
-const REDIS_HOST = process.env.REDIS_HOST || '127.0.0.1';
-const REDIS_PASSWORD = process.env.REDIS_PASSWORD || null;
+const REDIS_USERNAME = process.env.REDIS_USERNAME ;
+const REDIS_PORT = process.env.REDIS_PORT ;
+const REDIS_HOST = process.env.REDIS_HOST ;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD ;
 
 class Cache {
+  
   constructor() {
     this.redis = null;
   }
