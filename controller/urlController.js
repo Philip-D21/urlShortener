@@ -1,9 +1,8 @@
 const Url = require("../models/url");
-const Click = require("../models/clicks");
 const validUrl = require("valid-url");
 const shortid = require("shortid");
 const QRCode = require("qrcode");
-const createError = require('http-errors');
+
 const path = require("path");
 require("dotenv").config();
 
@@ -67,33 +66,36 @@ const createShortenUrl = async (req, res) => {
 
 
 
-// const redirectToLongUrl = async (req, res) => {
-//   try {
-//     const { shortId } = req.params;
+//get all urls
+const getAllUrl = async(req,res) => {
+  try {
+    const urls = await Url.find({});
+    return res.status(200).json({
+      urls
+    });
+  } catch (error) {
+     return res.status(500).json({
+       message: error.message,
+       status: "failed"
+    })
+  };
+}
 
-//     const url = await Url.findOne({ shortId });
+const redirectToLongUrl = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const url = await Url.findOne({ shortId });
 
-//     if (!url) {
-//       return res.status(404).json({ message: "URL not found" });
-//     }
-
-//     // const click = new Click({
-//     //   urlId: url._id,
-//     //   ipAddress: req.ip, 
-//     // });
-//     // await click.save();
-
-//     // url.clicks++;
-//     // await url.save();
-
-//     return res.redirect('/landing');
-//   } catch (error) {
-//     console.log(error); // Log the error for debugging purposes
-//     return res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
-
-
+    if (url) {
+      return url.clicks++;
+    }
+    await url.save();
+    return res.redirect(url.longUrl);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 
 const analytics = async (req, res) => {
@@ -171,7 +173,8 @@ const getClickCount = async (req, res) => {
 
 module.exports = {
   createShortenUrl,
- // redirectToLongUrl,
+  redirectToLongUrl,
+  getAllUrl,
   analytics,
   getQRImage,
   getClickCount,

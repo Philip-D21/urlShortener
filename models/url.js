@@ -16,10 +16,11 @@ const urlSchema = new mongoose.Schema({
      type: String,
      required: [true, 'Please provide the short id']
   },
-  clicks:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'click',
-  }],
+  clicks:{
+    type: Number,
+    default: 0,
+    required: true,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

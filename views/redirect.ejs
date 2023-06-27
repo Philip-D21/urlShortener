@@ -1,0 +1,36 @@
+<!-- redirectToLongUrl.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .message {
+      font-size: 24px;
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="message">Redirecting...</p>
+  </div>
+  <script>
+    setTimeout(function() {
+      window.location.href = "<%= url.longUrl %>";
+    }, 2000);
+  </script>
+</body>
+</html>
