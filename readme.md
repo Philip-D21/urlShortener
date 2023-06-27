@@ -115,6 +115,7 @@ Success
 - Responses
 
 Success
+
 ```
 {
     message: 'Login successful',
@@ -130,16 +131,19 @@ Success
 - Header
     - Authorization: Bearer {token}
 - Body: 
+
 ```
 {
-   longUrl: "https://qawsedfrt.com/cvfdghn"
-
+  
+  longUrl: "https://qawsedfrt.com/cvfdghn
+  
 }
 ```
 
 - Responses
 
 Success
+
 ```
 {
      "_id": "64997e5801bb5f7c97cd6c78",
