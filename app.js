@@ -14,7 +14,7 @@ const connect = require("./db/connect");
 //calling the availabe routes
 const urlRouter = require("./route/url");
 const userRouter = require("./route/user");
-const mainRouter = require("./route/main");
+const mainRouter = require("./route/base");
 
 //middlewares
 app.use(morgan('dev'));
