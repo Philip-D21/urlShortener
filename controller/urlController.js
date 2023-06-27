@@ -1,4 +1,5 @@
 const Url = require("../models/url");
+const Click = require("../models/clicks");
 const validUrl = require("valid-url");
 const shortid = require("shortid");
 const QRCode = require("qrcode");
@@ -8,7 +9,7 @@ require("dotenv").config();
 
 
 
-
+// function to generate QR code 
 const generateQRCode = async (shortId) => {
   if (!shortId) {
     return res.status(409).json({ message: "Please provide the shortId!" });
@@ -27,19 +28,22 @@ const generateQRCode = async (shortId) => {
 };
 
 
-
+// function to shorten long URL 
 const createShortenUrl = async (req, res) => {
   try {
     const { longUrl } = req.body;
+
    //validate url
     if (!longUrl || !validUrl.isUri(longUrl)) {
       return res.status(409).json({ message: "Wrong URL format!" });
     }
+
     let url = await Url.findOne({ longUrl });
+    //check if url exist then 
     if (url) {
-      generateQRCode(url.shortId);
       return res.status(200).json(url);
     } else {
+      // generate shortid and pass into shortUrl
       const shortId = shortid.generate();
       const shortUrl = process.env.Base_URL + "/" + shortId;
 
@@ -65,20 +69,28 @@ const createShortenUrl = async (req, res) => {
 const redirectToLongUrl = async (req, res) => {
   try {
     const { shortId } = req.params;
+    
     const url = await Url.findOne({ shortId });
 
     if (!url) {
       return res.status(404).json({ message: "URL not found" });
     }
+
+    const click = new Click({
+      urlId: url._id,
+      ipAddress: req.ip, 
+    });
+    await click.save();
+
     url.clicks++;
     await url.save();
 
-  
     return res.redirect(url.longUrl);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
