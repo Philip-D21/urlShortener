@@ -19,7 +19,6 @@ const urlSchema = new mongoose.Schema({
   clicks:{
     type: Number,
     default: 0,
-    required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -29,7 +28,8 @@ const urlSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-});
+},
+{ timestamp: true });
 
 
 

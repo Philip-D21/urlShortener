@@ -23,8 +23,9 @@ router.post("/login",  login);
 router.get("/history/:userId", (req, res) => {
     res.render("link history");
   });
-
-router.get('/link-history', getLinkHistory);
+  
+//get link history
+router.get('/link-history/:userId', getLinkHistory);
 
 //get by Id
 router.get('/user/:userId', getUserById);

@@ -27,53 +27,77 @@ const generateQRCode = async (shortId) => {
   }
 };
 
+const createShortenUrl = async (req,res) => {
+  const {longUrl} = req.body;
+  if(!longUrl || !validUrl.isUri(longUrl)) {
+      return res.status(404).json({ message: "wrong url "})
+  }
+  try {
+      let url = await Url.findOne({longUrl});
+      if(url) {
+          generateQRCode(url.shortId);
+          return res.status(200).json(url);
+      } else {
+          const shortId = shortid.generate();
+          const shortUrl = process.env.Base_URL + "/" + shortId;
+          url = await Url.create({longUrl, shortUrl, shortId});
+          generateQRCode(shortId);
+          return res.status(200).json(url);
+      }
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 
 // function to shorten long URL 
-const createShortenUrl = async (req, res) => {
-  try {
-    const { longUrl, customUrl } = req.body;
+// const createShortenUrl = async (req, res) => {
+//   try {
+//     const { longUrl, customUrl } = req.body;
 
-    // Validate URL
-    if (!longUrl || !validUrl.isUri(longUrl)) {
-      return res.status(409).json({ message: "Wrong URL format!" });
-    }
+//     // Validate URL
+//     if (!longUrl || !validUrl.isUri(longUrl)) {
+//       return res.status(409).json({ message: "Wrong URL format!" });
+//     }
 
-    // Check if custom URL is already taken
-    if (customUrl) {
-      const existingUrl = await Url.findOne({ customUrl });
-      if (existingUrl) {
-        return res.status(409).json({ message: "Custom URL is already taken!" });
-      }
-    }
-    let url = await Url.findOne({ longUrl });
-    if (url) {
-          return res.status(200).json({
-            status: "ok",
-            data: url
-          });
-    } else {
+//     // Check if custom URL is already taken
+//     if (customUrl) {
+//       const existingUrl = await Url.findOne({ customUrl });
+//       if (existingUrl) {
+//         return res.status(409).json({ message: "Custom URL is already taken!" });
+//       }
+//     }
+
+//   let url =  await  Url.findOne({ longUrl });
+//     if (url) {
+       //generateQRCode(url.shortId);
+//           return res.status(200).json({
+//             status: "ok",
+//             data: url
+//           });
+//     } else {
      
-      const shortId = customUrl || shortid.generate();
-      const shortUrl = process.env.Base_URL + "/" + shortId;
+//       const shortId = customUrl || shortid.generate();
+//       const shortUrl = process.env.Base_URL + "/" + shortId;
 
-      url = await Url.create({
-        longUrl,
-        shortUrl,
-        shortId,
-        userId: req.user.id,
-        customUrl: customUrl || null,
-      });
+//       url = await Url.create({
+//         longUrl,
+//         shortUrl,
+//         shortId,
+//         userId: req.user.id,
+//         customUrl: customUrl || null,
+//       });
 
-      generateQRCode(shortId);
+//       generateQRCode(shortId);
 
-      return res.status(201).json({
-        url,
-      });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
+//       return res.status(201).json({
+//         url,
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
 
 
 
