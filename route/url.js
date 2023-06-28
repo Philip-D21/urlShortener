@@ -4,7 +4,7 @@ const { authenticate} = require("../middleware/authentication")
 
 const {
     createShortenUrl,
-    getAnalytics,
+    handleUrlAnalytics,
 }= require("../controller/urlController")
 
 router.get("/shorten", async(req,res)=>{
@@ -14,7 +14,7 @@ router.get("/shorten", async(req,res)=>{
 router.post("/shorten", authenticate, createShortenUrl);
 
 
-router.get("/analytics/:shortId", authenticate, analytics);
+router.get("/analytics/:shortId", authenticate, handleUrlAnalytics);
 
 
 
