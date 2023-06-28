@@ -45,11 +45,13 @@ const createShortenUrl = async (req, res) => {
         return res.status(409).json({ message: "Custom URL is already taken!" });
       }
     }
-
     let url = await Url.findOne({ longUrl });
-       if (url) {
-          return res.status(200).json(url);
-       } else {
+    if (url) {
+          return res.status(200).json({
+            status: "ok",
+            data: url
+          });
+    } else {
      
       const shortId = customUrl || shortid.generate();
       const shortUrl = process.env.Base_URL + "/" + shortId;
@@ -74,6 +76,24 @@ const createShortenUrl = async (req, res) => {
 };
 
 
+const getAnalytics = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+
+    const url = await Url.findOne({ shortId });
+
+    if (!url) {
+      return res.status(404).json({ message: "URL not found" });
+    }
+
+    return res.status(200).json({
+      clicks: url.clicks,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 // //get all urls
 // const getAllUrl = async(req,res) => {
@@ -105,28 +125,6 @@ const createShortenUrl = async (req, res) => {
 //     return res.status(500).json({ message: "Internal Server Error" });
 //   }
 // };
-
-
-const analytics = async (req, res) => {
-  try {
-    const { shortId } = req.params;
-
-    // Find the URL entry in the database based on the shortId
-    const url = await Url.findOne({ shortId });
-
-    if (!url) {
-      return res.status(404).json({ message: "URL not found" });
-    }
-
-    return res.status(200).json({
-      clicks: url.clicks,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
-
 
 // const getQRImage = async (req, res) => {
 //   try {
@@ -165,7 +163,6 @@ const analytics = async (req, res) => {
 // };
 
 
-
 // const getClickCount = async (req, res) => {
 //   const { shortUrl } = req.body;
 
@@ -183,6 +180,5 @@ const analytics = async (req, res) => {
 
 module.exports = {
   createShortenUrl,
-  getAllUrl,
-  analytics,
+  getAnalytics,
 };
