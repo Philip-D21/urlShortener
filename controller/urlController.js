@@ -81,21 +81,21 @@ const getAllUrl = async(req,res) => {
   };
 }
 
-const redirectToLongUrl = async (req, res) => {
-  try {
-    const { shortId } = req.params;
-    const url = await Url.findOne({ shortId });
+// const redirectToLongUrl = async (req, res) => {
+//   try {
+//     const { shortId } = req.params;
+//     const url = await Url.findOne({ shortId });
 
-    if (url) {
-      return url.clicks++;
-    }
-    await url.save();
-    return res.redirect(url.longUrl);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     if (url) {
+//       return url.clicks++;
+//     }
+//     await url.save();
+//     return res.redirect(url.longUrl);
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
 
 const analytics = async (req, res) => {

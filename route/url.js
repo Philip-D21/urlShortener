@@ -17,8 +17,7 @@ router.post("/shorten", authenticate, createShortenUrl);
 
 router.get("/shorten/all", getAllUrl);
 
-router.get("/image/:shortId",authenticate, getQRImage);
-
+// router.get("/image/:shortId",authenticate, getQRImage);
 
 router.get("/analytics/:shortId", authenticate, analytics);
 

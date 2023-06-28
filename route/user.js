@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const { register, login } = require("../controller/auth");
-const { getAllUrlsByUser } = require("../controller/userController");
+const { getAllUrlsByUser,getUserById, getAllUsers } = require("../controller/userController");
 
 router.get("/signup", (req, res) => {
   res.render("signup");
@@ -24,7 +24,13 @@ router.get("/history/:userId", (req, res) => {
     res.render("link history");
   });
 
-  router.get('/user/:userId/urls', getAllUrlsByUser);
+router.get('/user/:userId/urls', getAllUrlsByUser);
+
+//get by Id
+router.get('/user/:userId', getUserById);
+
+// Get all users
+router.get('/users', getAllUsers);
 
 
 
