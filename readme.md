@@ -62,7 +62,7 @@ Back-end development Tech Stack
 |  longurl | string |  required  |
 |  shortUrl  |  string |  required  |
 |  shortId    | string  |  required |
-|  clicks |   array |  ref : `click` |
+|  clicks |   Number |  default: 0 |
 |  userId | ObjectId |  ref: `User` |
 |  customUrl  |  string  | unique : `true` |
 
@@ -144,8 +144,20 @@ Success
 - Method: GET
 - Header
     - application/json
--
+
 - Responses
+
+```
+{
+         "_id": "64909776869ce02441b5abc5",
+        "username": "tuesday",
+        "email": "tues@gmail.com",
+        "password": "$2b$10$I0EXPdZNNlDxfUnqbWyN1.AQB9zH8DhKwwWOxb8KZee0zcl7rEeD6",
+        "createdAt": "2023-06-19T17:59:18.374Z",
+        "updatedAt": "2023-06-19T17:59:18.374Z",
+        "__v": 0
+}
+```
 ---
 
 
