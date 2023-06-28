@@ -127,6 +127,27 @@ Success
 }
 ```
 ---
+### get single user 
+
+- Route: /user/:userId
+- Method: GET
+- Header
+    - application/json
+-
+- Responses
+---
+
+
+### get all users
+
+- Route: /users
+- Method: GET
+- Header
+    - application/json
+-
+- Responses
+---
+
 
 ### create Shorten Url with generate QR code
 
@@ -158,39 +179,23 @@ Success
 }
 ```
 ---
-### get all url created by a user
+### get all link history created by user
 
 - Route: /api/auth/user/:userId/urls
 - Method: GET
 - Header
     - application/json
-- Body: 
-
-```
-{
-  
-  longUrl: "https://qawsedfrt.com/cvfdghn
-  
-}
-```
+-
 - Responses
 ---
 
 ### get analytics of the shortened url 
 
-- Route: /api/url/shorten
+- Route: /analytics/:shortId
 - Method: GET
 - Header
     - application/json
-- Body: 
 
-```
-{
-  
-  req.params: /ananltics/:shortId
-  
-}
-```
 - Responses
 
 ## Contributor
