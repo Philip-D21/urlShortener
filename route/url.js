@@ -14,7 +14,6 @@ router.get("/shorten", async(req,res)=>{
 router.post("/shorten", authenticate, createShortenUrl);
 
 
-
 router.get("/analytics/:shortId", authenticate, analytics);
 
 

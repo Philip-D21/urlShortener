@@ -76,24 +76,29 @@ const createShortenUrl = async (req, res) => {
 };
 
 
-const getAnalytics = async (req, res) => {
+
+
+const handleUrlAnalytics = async (req, res) => {
   try {
-    const { shortId } = req.params;
-
-    const url = await Url.findOne({ shortId });
-
+    const url = await Url.findOne({ shortId: req.params.shortId });
     if (!url) {
-      return res.status(404).json({ message: "URL not found" });
+      throw new Error('URL not found');
     }
 
-    return res.status(200).json({
-      clicks: url.clicks,
-    });
+    url.clicks++;
+    await url.save();
+
+    res.status(200).json(url); // Return the updated URL document as JSON response
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
+    console.error('Error handling URL analytics:', error);
+    res.status(500).json({ error: 'An error occurred' });
   }
-};
+}
+
+
+
+
+
 
 // //get all urls
 // const getAllUrl = async(req,res) => {
@@ -180,5 +185,5 @@ const getAnalytics = async (req, res) => {
 
 module.exports = {
   createShortenUrl,
-  getAnalytics,
+  handleUrlAnalytics,
 };
