@@ -3,13 +3,18 @@ const Url = require("../models/url")
 
 
 // get all url by use
-const getAllUrlsByUser = async (req, res) => {
+const getLinkHistory = async (req, res) => {
     try {
-      const { userId } = req.params;
-      const urls = await Url.find({ userId });
+      
+      const userId = req.user.id;
+      
+      const linkHistory = await Url.find({ userId });
   
-      if (urls.length > 0) {
-        return res.json(urls);
+      if ( linkHistory.length > 0) {
+        return res.Status(200).json({ 
+          status: "link history retrieved",
+          data: linkHistory,
+        });
       } else {
         return res.status(404).json({ message: 'No URLs found for the user' });
       }
@@ -17,7 +22,7 @@ const getAllUrlsByUser = async (req, res) => {
       console.log(error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
-  };
+};
   
 
 // Get a user by ID
@@ -52,7 +57,7 @@ const getAllUsers = async (req, res) => {
 
 
 module.exports = {
-    getAllUrlsByUser,
+    getLinkHistory,
     getUserById,
     getAllUsers,
 }
