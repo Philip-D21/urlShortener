@@ -11,7 +11,7 @@ Back-end development Tech Stack
 
 ```
 - clone this repo
-- run  `npm run start:dev`
+- run `npm run start:dev`
 ```
 ---
 
@@ -27,7 +27,7 @@ Back-end development Tech Stack
 ---
 
 ### file structure:
-  - [App.js]: main file
+  + `[App.js]`: main file
   + `routes`: a folder that uses the express router feature and keeps the route information in it.
   + `config` : contains the redis client connection
   + `controllers`: a folder that contains controller functions for routes authentication.
@@ -209,6 +209,8 @@ Success
     - application/json
 
 - Responses
+
+
 
 ## Contributor
    - Daudu Philip
