@@ -16,15 +16,16 @@ const app = express();
 //Database
 const connect = require("./db/connect");
 
+
 // express rate limiter config
 const limiter = rateLimit({
-   windowMs: 0.5* 60 * 1000,  // 15 minutes
+   windowMs: 0.5 * 60 * 1000,  // 15 minutes
    max: 4,  // limit each IP to 100 requests per `window` (here, per 15 minutes)
    standardHeaders: true,  // return rate limit info in the `RataeLimit-*` headers
    legacyHeaders: false,  // Disable the `X-RateLimit-*` headers
-
 });
-  
+
+
 //using it as a middleware
 app.use(limiter);
 
