@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 const path = require("path");
+const helmet = require("helment");
 require("dotenv").config({ path: "./.env" });
 const rateLimit = require('express-rate-limit')
 
@@ -32,6 +33,7 @@ const userRouter = require("./route/user");
 const mainRouter = require("./route/base");
 
 //middlewares
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.json())
