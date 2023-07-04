@@ -4,9 +4,10 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 const path = require("path");
-const helmet = require("helment");
+const helmet = require("helmet");
+const logger = require("./logging/logger");
 require("dotenv").config({ path: "./.env" });
-const rateLimit = require('express-rate-limit')
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -36,7 +37,7 @@ const mainRouter = require("./route/base");
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(cors());
 
 
@@ -67,6 +68,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     const status = err.status || 500;
     const message = err.message || 'Internal Server Error';
+    logger.error(err.message)
     res.status(status).json({ status, message });
   });
 
