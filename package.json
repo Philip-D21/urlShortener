@@ -32,7 +32,8 @@
     "redis": "^4.6.7",
     "shortid": "^2.2.16",
     "valid-url": "^1.0.9",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "winston": "^3.9.0"
   },
   "devDependencies": {
     "jest": "^29.5.0"
