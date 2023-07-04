@@ -8,6 +8,7 @@ const helmet = require("helmet");
 const logger = require("./logging/logger");
 require("dotenv").config({ path: "./.env" });
 const rateLimit = require('express-rate-limit');
+const httpLogger = require("./logging/httpLogger");
 
 const app = express();
 
@@ -33,21 +34,18 @@ const urlRouter = require("./route/url");
 const userRouter = require("./route/user");
 const mainRouter = require("./route/base");
 
+
 //middlewares
 app.use(helmet());
-app.use(morgan('dev'));
+app.use(httpLogger);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
-
-
 app.use(express.static('public'));
 
 // view engine configuration
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-
 app.use(express.urlencoded({ extended: false  }));
 
 
@@ -82,14 +80,14 @@ const start = async () => {
     try {
        await connect(process.env.MONGO_URI)
        .then(() => {
-          console.log("Database connected");
+          logger.info("Database connected");
        }).catch((err) => {
           console.log("Unable to connect to the database");
           console.log(err);
        });
  
        app.listen(port, () => {
-          console.log(`server is running on port ${port}...`);
+          logger.info(`server is running on port ${port}...`);
        });
     } catch (err) {
        console.log(err);

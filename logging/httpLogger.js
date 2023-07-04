@@ -1,6 +1,6 @@
 const morgan = require ("morgan");
 const json = require("morgan-json");
-const logger = require("../logger");
+const logger = require("./logger");
 
 
 const format = json({
