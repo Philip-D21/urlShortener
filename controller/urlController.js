@@ -50,7 +50,7 @@ const createShortenUrl = async (req, res) => {
 
     let url = await Url.findOne({ longUrl });
     if (url) {
-      await generateQRCode(url.shortId); // Generate QR code for existing URL
+      await generateQRCode(url.shortId);
       return res.status(200).json({
         status: "ok",
         data: url
