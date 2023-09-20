@@ -9,9 +9,27 @@ const logger = require("./logging/logger");
 require("dotenv").config({ path: "./.env" });
 const rateLimit = require('express-rate-limit');
 const httpLogger = require("./logging/httpLogger");
+const { createClient } = require("redis");
 
 const app = express();
 
+const redisClient = createClient({
+   password: process.env.REDIS_PASSWORD,
+   socket: {
+     host: process.env.REDIS_HOST,
+     port: process.env.REDIS_PORT,
+   },
+ });
+ 
+ // Log Redis errors
+ redisClient.on("error", (err) => console.log("Redis Client Error", err));
+ redisClient.on("connect", () => console.log("Redis connected successfully"));
+ 
+ // Middleware to make redisClient available in all routes
+ app.use((req, res, next) => {
+   req.redisClient = redisClient;
+   next();
+ })
 
 //Database
 const connect = require("./db/connect");

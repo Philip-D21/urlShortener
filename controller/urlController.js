@@ -104,19 +104,19 @@ const handleUrlAnalytics = async (req, res) => {
 
 
 // //get all urls
-// const getAllUrl = async(req,res) => {
-//   try {
-//     const urls = await Url.find({});
-//     return res.status(200).json({
-//       urls
-//     });
-//   } catch (error) {
-//      return res.status(500).json({
-//        message: error.message,
-//        status: "failed"
-//     })
-//   };
-// }
+const getAllUrl = async(req,res) => {
+  try {
+    const urls = await Url.find({});
+    return res.status(200).json({
+      urls
+    });
+  } catch (error) {
+     return res.status(500).json({
+       message: error.message,
+       status: "failed"
+    })
+  };
+}
 
 // const redirectToLongUrl = async (req, res) => {
 //   try {
