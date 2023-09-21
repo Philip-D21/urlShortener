@@ -134,41 +134,41 @@ const getAllUrl = async(req,res) => {
 //   }
 // };
 
-// const getQRImage = async (req, res) => {
-//   try {
-//     const { shortId } = req.params;
+const getQRImage = async (req, res) => {
+  try {
+    const { shortId } = req.params;
 
-//     if (!shortId) {
-//       return res.status(400).json({ message: "Please provide the shortId!" });
-//     }
-//     const url = await Url.findOne({ shortId });
-//     if (!url) {
-//       return res
-//         .status(400)
-//         .json({
-//           message: "QR code image does not exist for the provided shortId!",
-//         });
-//     }
+    if (!shortId) {
+      return res.status(400).json({ message: "Please provide the shortId!" });
+    }
+    const url = await Url.findOne({ shortId });
+    if (!url) {
+      return res
+        .status(400)
+        .json({
+          message: "QR code image does not exist for the provided shortId!",
+        });
+    }
 
-//     const qrCodeImagePath = path.join(
-//       __dirname,
-//       "..",
-//       "QRCodes",
-//       `${shortId}.png`
-//     );
+    const qrCodeImagePath = path.join(
+      __dirname,
+      "..",
+      "QRCodes",
+      `${shortId}.png`
+    );
 
-//     return res.sendFile(qrCodeImagePath, (err) => {
-//       if (err) {
-//         console.error("Error sending QR code image:", err);
-//         return res
-//           .status(500)
-//           .json({ message: "Failed to send QR code image!" });
-//       }
-//     });
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// };
+    return res.sendFile(qrCodeImagePath, (err) => {
+      if (err) {
+        console.error("Error sending QR code image:", err);
+        return res
+          .status(500)
+          .json({ message: "Failed to send QR code image!" });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 
 // const getClickCount = async (req, res) => {
