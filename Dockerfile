@@ -1,8 +1,10 @@
 # syntax=docker/dockerfile:1
 
 FROM node:18-alpine
-WORKDIR /urlShortener
-COPY . .
+WORKDIR /app
+COPY . /app
 RUN npm install 
-CMD ["node", "app.js"]
 EXPOSE 4400
+CMD node app.js
+
+
