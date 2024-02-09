@@ -23,6 +23,7 @@ const generateQRCode = async (shortId) => {
       }
     );
   } catch (error) {
+
     console.log(error);
   }
 };
@@ -42,6 +43,7 @@ const createShortenUrl = async (req, res) => {
 
     // Check if custom URL is already taken
     if (customUrl) {
+      
       const existingUrl = await Url.findOne({ customUrl });
       if (existingUrl) {
         return res.status(409).json({ message: "Custom URL is already taken!" });
