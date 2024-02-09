@@ -8,11 +8,9 @@ const { getUserById, getAllUsers, getLinkHistory } = require("../controller/user
 router.get("/signup", (req, res) => {
   res.render("signup");
 
-  
 });
 
 router.post("/signup", register);
-
 
 router.get("/login", (req, res) => {
   res.render("login");
@@ -32,7 +30,6 @@ router.get('/user/:userId', getUserById);
 
 // Get all users
 router.get('/users', getAllUsers);
-
 
 
 module.exports = router;
