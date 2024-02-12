@@ -10,7 +10,7 @@ const register = async (req, res,next) => {
   
       const userExist = await User.findOne({ email });
       if (userExist) {
-        return res.status(409).json({
+        return res.status(400).json({
           status: 'failed',
           message: 'Email already exists in the database',
         });
@@ -24,18 +24,18 @@ const register = async (req, res,next) => {
         password: hashedPassword,
       });
   
-      res.redirect("/api/auth/login");
-    //   res.status(201).json({
-    //     status: 'success',
-    //     data: newUser,
-    //   });
+    //  res.redirect("/api/auth/login");
+      res.status(201).json({
+        status: 'success',
+        data: newUser,
+      });
 
 
     } catch (err) {
-    // return res.status(500).json({
-    // message: err.message,
-    // });
-        next(err)
+    return res.status(500).json({
+    message: err.message,
+    });
+      //  next(err)
     }
   }
 
