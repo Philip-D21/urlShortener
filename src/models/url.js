@@ -10,6 +10,7 @@ const urlSchema = new mongoose.Schema({
     type: String,
     required: [true,"Please provide long url"] 
   },
+  
   shortId:{
      type: String,
      required: [true, 'Please provide the short id']
