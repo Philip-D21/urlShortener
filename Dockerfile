@@ -1,10 +1,15 @@
-# syntax=docker/dockerfile:1
+FROM node:14 as base
 
-FROM node:18-alpine
-WORKDIR /app
-COPY . /app
-RUN npm install 
-EXPOSE 4400
-CMD node app.js
+WORKDIR /home/node/app
 
+COPY package.json ./
 
+RUN npm i
+
+COPY . .
+
+FROM base as production
+
+ENV NODE_PATH=./build
+
+RUN npm run build
