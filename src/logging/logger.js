@@ -23,7 +23,6 @@ const logger = winston.createLogger({
   level: winston.config.npm.levels,
   
   transports: [
-   
     new winston.transports.File(options.files),
     new winston.transports.Console(options.console),
   ],

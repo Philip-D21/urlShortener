@@ -7,7 +7,6 @@ const redisClient  = require('../config/redis');
 
 const getLinkHistory = async (req, res) => {
   try {
-
     const { userId } = req.params;
     const linkHistory = await Url.find({ userId});
 
