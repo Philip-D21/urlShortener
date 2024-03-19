@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
-const urlSchema = new mongoose.Schema({
+export const Url = new mongoose.Schema({
   shortUrl: {
     type: String,
     required: [true, "Please provide short Url"]
@@ -28,10 +28,11 @@ const urlSchema = new mongoose.Schema({
     unique: true,
   },
 },
-{ timestamp: true });
+
+);
 
 
 
 
 
-module.exports = mongoose.model('Url', urlSchema);
+// module.exports = mongoose.model('Url', urlSchema);

@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const clickSchema = new mongoose.Schema({
+
+export const Clicks = new mongoose.Schema({
   urlId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'URL',
@@ -17,4 +18,4 @@ const clickSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Click', clickSchema);
+// module.exports = mongoose.model('Click', clickSchema);

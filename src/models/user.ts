@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 
-const userSchema = new mongoose.Schema({
+export const User = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -24,4 +24,4 @@ const userSchema = new mongoose.Schema({
 );
 
 
-module.exports = mongoose.model('User', userSchema);
+// module.exports = mongoose.model('User', userSchema);
