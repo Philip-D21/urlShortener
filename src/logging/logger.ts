@@ -19,7 +19,7 @@ const options = {
 
 
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   level: winston.config.npm.levels,
   
   transports: [
@@ -29,4 +29,3 @@ const logger = winston.createLogger({
   exitOnError: false
 });
 
-module.exports = logger;

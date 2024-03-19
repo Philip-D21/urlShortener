@@ -10,7 +10,7 @@ import rateLimit from 'express-rate-limit';
 import httpLogger from "./logging/httpLogger";
 import { createClient } from "redis";
 import createError from "http-errors";
-import connect from "./db/connect";
+import { connect } from "./db/connect";
 
 dotenv.config({ path: "./.env" });
 

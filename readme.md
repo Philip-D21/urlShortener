@@ -213,6 +213,11 @@ Success
 ## Docker 
 
 * learning docker
+* caching 
+* loading balancing
+* message broker 
+* cron_jobs/ workers
+* push notification
 
 
 ## Contributor
