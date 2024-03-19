@@ -1,84 +1,72 @@
 "use strict";
-//importing express
-const express = require("express");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const cors = require("cors");
-const path = require("path");
-const helmet = require("helmet");
-const logger = require("./logging/logger");
-require("dotenv").config({ path: "./.env" });
-const rateLimit = require('express-rate-limit');
-const httpLogger = require("./logging/httpLogger");
-const { createClient } = require("redis");
-const app = express();
-const redisClient = createClient({
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
+const helmet_1 = __importDefault(require("helmet"));
+const logger_1 = __importDefault(require("./logging/logger"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const httpLogger_1 = __importDefault(require("./logging/httpLogger"));
+const redis_1 = require("redis");
+const http_errors_1 = __importDefault(require("http-errors"));
+const connect_1 = __importDefault(require("./db/connect"));
+dotenv_1.default.config({ path: "./.env" });
+const app = (0, express_1.default)();
+const redisClient = (0, redis_1.createClient)({
     password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
+        port: parseInt(process.env.REDIS_PORT || '6379'),
     },
 });
-// Log Redis errors
 redisClient.on("error", (err) => console.log("Redis Client Error", err));
 redisClient.on("connect", () => console.log("Redis connected successfully"));
-// Middleware to make redisClient available in all routes
 app.use((req, res, next) => {
     req.redisClient = redisClient;
     next();
 });
-//Database
-const connect = require("./db/connect");
-// express rate limiter config
-const limiter = rateLimit({
+const limiter = (0, express_rate_limit_1.default)({
     windowMs: 0.5 * 60 * 1000, // 15 minutes
-    max: 4, // limit each IP to 100 requests per `window` (here, per 15 minutes)
-    standardHeaders: true, // return rate limit info in the `RataeLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    max: 4,
+    standardHeaders: true,
+    legacyHeaders: false,
 });
-//using it as a middleware
 app.use(limiter);
-//calling the availabe routes
 const urlRouter = require("./route/url");
 const userRouter = require("./route/user");
 const mainRouter = require("./route/base");
-//middlewares
-app.use(helmet());
-app.use(httpLogger);
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(cors());
-app.use(express.static('public'));
-// view engine configuration
+app.use((0, helmet_1.default)());
+app.use(httpLogger_1.default);
+app.use(express_1.default.json());
+app.use(body_parser_1.default.json());
+app.use((0, cors_1.default)());
+app.use(express_1.default.static('public'));
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.urlencoded({ extended: false }));
-//routes
+app.set('views', path_1.default.join(__dirname, 'views'));
+app.use(express_1.default.urlencoded({ extended: false }));
 app.use("/api/auth", userRouter);
 app.use("/api/url", urlRouter);
 app.use("/", mainRouter);
-// Error handling middleware
 app.use((req, res, next) => {
-    next(createError.NotFound());
+    next(http_errors_1.default.NotFound());
 });
 app.use((err, req, res, next) => {
     const status = err.status || 500;
     const message = err.message || 'Internal Server Error';
-    logger.error(err.message);
+    logger_1.default.error(err.message);
     res.status(status).json({ status, message });
 });
 const port = process.env.PORT || 4400;
 const start = async () => {
     try {
-        await connect(process.env.MONGO_URI)
-            .then(() => {
-            logger.info("Database connected");
-        }).catch((err) => {
-            console.log("Unable to connect to the database");
-            console.log(err);
-        });
+        await (0, connect_1.default)(process.env.MONGO_URI || '');
         app.listen(port, () => {
-            logger.info(`server is running on port ${port}...`);
+            logger_1.default.info(`Server is running on port ${port}...`);
         });
     }
     catch (err) {
